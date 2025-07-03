@@ -99,6 +99,7 @@ if __name__ == "__main__":
     # Use adaptive strategy based on dynamic threshold
     model_choices = ["compressed" if ci >= CI_THRESHOLD else "base" for ci in ci_forecast]
 
+    # section of code usd in pervious simulation with intel power gaject, but is not used anymore cause the power gajet got discontinued.
     '''
     def test_model(model, dataset):
       
@@ -147,14 +148,21 @@ if __name__ == "__main__":
 
         test_loader = DataLoader(dataset, batch_size=128, shuffle=False, num_workers=2, pin_memory=True)
 
-        # Setup WMI power tracking
-        w = wmi.WMI(namespace="root\\OpenHardwareMonitor")
 
         # Define a flag to stop the power tracking thread
         stop_flag = threading.Event()
 
         # --- Background Thread for Power Tracking ---
         def track_power():
+            pythoncom.CoInitialize() 
+            try:
+                w = wmi.WMI(namespace="root\\OpenHardwareMonitor")
+                sensors = w.Sensor()  # Run once to test access
+            except Exception as e:
+                print(f"Initial WMI access failed: {e}")
+                stop_flag.set()
+                return
+
             while not stop_flag.is_set():
                 try:
                     sensors = w.Sensor()
@@ -163,9 +171,13 @@ if __name__ == "__main__":
                             power = float(sensor.Value)
                             power_log.append(power)
                             break
+                    else:
+                        print("CPU Package power sensor not found.")
                 except Exception as e:
                     print(f"Power read failed: {e}")
                 time.sleep(polling_interval)
+
+
 
         # Start tracking thread
         power_thread = threading.Thread(target=track_power)
@@ -206,14 +218,21 @@ if __name__ == "__main__":
 
         test_loader = DataLoader(dataset, batch_size=128, shuffle=False, num_workers=2, pin_memory=True)
 
-        # Setup WMI power tracking
-        w = wmi.WMI(namespace="root\\OpenHardwareMonitor")
 
         # Define a flag to stop the power tracking thread
         stop_flag = threading.Event()
 
         # --- Background Thread for Power Tracking ---
         def track_power():
+            pythoncom.CoInitialize() 
+            try:
+                w = wmi.WMI(namespace="root\\OpenHardwareMonitor")
+                sensors = w.Sensor()  # Run once to test access
+            except Exception as e:
+                print(f"Initial WMI access failed: {e}")
+                stop_flag.set()
+                return
+
             while not stop_flag.is_set():
                 try:
                     sensors = w.Sensor()
@@ -222,6 +241,8 @@ if __name__ == "__main__":
                             power = float(sensor.Value)
                             power_log.append(power)
                             break
+                    else:
+                        print("CPU Package power sensor not found.")
                 except Exception as e:
                     print(f"Power read failed: {e}")
                 time.sleep(polling_interval)
@@ -256,6 +277,7 @@ if __name__ == "__main__":
 
         return accuracy, energy_per_inference
 
+# peice of code thats not really a part of the research but it computes the ideal lambda value based on the accuracy and carbon emission of the models.
     def find_index(avg_accs, total_emissions):
                 
         acc_b = avg_accs["Base Model"]
@@ -288,6 +310,11 @@ if __name__ == "__main__":
     start_time=time.time()
     print("Starting Simulation...")
 
+    correct_base_total = 0
+    correct_quant_total = 0
+    correct_adaptive_total = 0
+    total_samples = 0
+
     for t in range(NUM_STEPS):
 
         round_start_time = time.time()
@@ -302,6 +329,7 @@ if __name__ == "__main__":
 
         # Evaluate models
         acc_base, energy_base = test_model_base(base_model, D_t)
+        time.sleep(1) # Sleep to avoid power sensor read errors
         acc_quant, energy_quant = test_model_compressed(quantized_model, D_t)
 
         if model_adaptive == base_model:
@@ -310,10 +338,15 @@ if __name__ == "__main__":
             acc_adaptive, energy_adaptive = acc_quant, energy_quant
        
 
-        # Store accuracy results
+        correct_base_total += acc_base * SAMPLE_SIZE
+        correct_quant_total += acc_quant * SAMPLE_SIZE
+        correct_adaptive_total += acc_adaptive * SAMPLE_SIZE
+        total_samples += SAMPLE_SIZE
+
         accuracy_baseline[t] = acc_base
         accuracy_quantized[t] = acc_quant
         accuracy_adaptive[t] = acc_adaptive
+
 
         # Store carbon emissions
         carbon_emissions_baseline[t] = compute_carbon_emission(energy_base, current_CI) * SAMPLE_SIZE
