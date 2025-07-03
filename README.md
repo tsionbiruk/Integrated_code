@@ -57,6 +57,23 @@ python3 secondTierForecasts.py <configFileName> <-l/-d> <-s>
 - `-l` or `-d`: Choose whether to use **Lifecycle** (`-l`) or **Direct** (`-d`) emissions models.
 - `-s`: Optional flag to **use saved models** instead of retraining.
 
+## Citation
+
+If you use **CarbonCast** in your research or project, please consider citing the original paper:
+
+```
+@inproceedings{maji2022carboncast,
+  title={CarbonCast: multi-day forecasting of grid carbon intensity},
+  author={Maji, Diptyaroop and Shenoy, Prashant and Sitaraman, Ramesh K},
+  booktitle={Proceedings of the 9th ACM International Conference on Systems for Energy-Efficient Buildings, Cities, and Transportation},
+  pages={198--207},
+  year={2022}
+}
+```
+
+You can also find the CarbonCast project here: [https://github.com/carbonfirst/CarbonCast](https://github.com/carbonfirst/CarbonCast)
+
+
 > Example:
 > ```bash
 > python3 secondTierForecasts.py secondTierConfig.json -l -s
