@@ -57,6 +57,11 @@ python3 secondTierForecasts.py <configFileName> <-l/-d> <-s>
 - `-l` or `-d`: Choose whether to use **Lifecycle** (`-l`) or **Direct** (`-d`) emissions models.
 - `-s`: Optional flag to **use saved models** instead of retraining.
 
+> Example:
+> ```bash
+> python3 secondTierForecasts.py secondTierConfig.json -l -s
+> ```
+
 ## Citation
 
 If you use **CarbonCast** in your research or project, please consider citing the original paper:
@@ -74,9 +79,6 @@ If you use **CarbonCast** in your research or project, please consider citing th
 You can also find the CarbonCast project here: [https://github.com/carbonfirst/CarbonCast](https://github.com/carbonfirst/CarbonCast)
 
 
-> Example:
-> ```bash
-> python3 secondTierForecasts.py secondTierConfig.json -l -s
-> ```
+
 
 
