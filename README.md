@@ -33,7 +33,7 @@ To auto-activate the environment in VSCode terminal, open `.vscode/settings.json
 ### 4. Run the Simulation
 
 ```bash
-python Forecast_simulation.py
+python Forcast_simulation.py
 ```
 > **Note:**  
 > This integrated simulation is a continuation of the [CarbonCast](https://github.com/carbonfirst/CarbonCast.git) project and already includes the trained models required to make carbon intensity predictions.  
@@ -61,6 +61,27 @@ python3 secondTierForecasts.py <configFileName> <-l/-d> <-s>
 > ```bash
 > python3 secondTierForecasts.py secondTierConfig.json -l -s
 > ```
+
+## Power Tracking
+
+This simulation uses [**Open Hardware Monitor**](https://openhardwaremonitor.org/) to measure real-time CPU power consumption.
+
+### Setup Instructions:
+
+1. **Download Open Hardware Monitor**  
+   [https://openhardwaremonitor.org/](https://openhardwaremonitor.org/)
+
+2. **Extract and Run as Administrator**  
+   - Right-click `OpenHardwareMonitor.exe`
+   - Select **“Run as administrator”**
+   - Leave the program running in the background while the simulation is active.
+
+3. The simulation reads power data using the Windows WMI interface from Open Hardware Monitor.  
+   If the monitor is not running or is not run with administrator privileges, **power readings will fail**.
+
+> Note: You must be on **Windows** for this feature to work, and your system must support power sensors (e.g., CPU Package power).
+
+
 
 ## Citation
 
