@@ -35,4 +35,31 @@ To auto-activate the environment in VSCode terminal, open `.vscode/settings.json
 ```bash
 python Forecast_simulation.py
 ```
+> **Note:**  
+> This integrated simulation is a continuation of the [CarbonCast](https://github.com/carbonfirst/CarbonCast.git) project and already includes the trained models required to make carbon intensity predictions.  
+> 
+> If you wish to view the raw weather and emissions data, please visit the CarbonCast GitHub repository linked above.
+>
+> This repository only contains the predicted forecast data for **Australia** and **The Netherlands**.  
+> 
+> To generate forecast data for other regions:
+> 1. First, download the corresponding raw data from the [CarbonCast repository](https://github.com/carbonfirst/CarbonCast.git).
+> 2. Then, run the `secondTierForecasts.py` script using the following syntax:
+
+```bash
+python3 secondTierForecasts.py <configFileName> <-l/-d> <-s>
+```
+
+**Parameters:**
+- `configFileName`: e.g., `secondTierConfig.json` — specify your region(s) inside.
+- **Regions supported**:  
+  `CISO`, `PJM`, `ERCO`, `ISNE`, `NYISO`, `FPL`, `BPAT`, `SE`, `DE`, `ES`, `NL`, `PL`, `AUS_QLD`
+- `-l` or `-d`: Choose whether to use **Lifecycle** (`-l`) or **Direct** (`-d`) emissions models.
+- `-s`: Optional flag to **use saved models** instead of retraining.
+
+> Example:
+> ```bash
+> python3 secondTierForecasts.py secondTierConfig.json -l -s
+> ```
+
 
