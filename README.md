@@ -81,6 +81,15 @@ This simulation uses [**Open Hardware Monitor**](https://openhardwaremonitor.org
 
 > Note: You must be on **Windows** for this feature to work, and your system must support power sensors (e.g., CPU Package power).
 
+## Models Used in the Simulation
+
+This simulation performs inference using two pre-trained models:
+
+- `resnet18_full_cifar100.pth` — The **base model**, trained on the CIFAR-100 dataset using standard full-precision training.
+- `resnet18_qat_retrained.pth` — The **compressed model**, trained using **Quantization-Aware Training (QAT)** for improved energy efficiency.
+
+These models are used alternately during the simulation depending on the strategy being evaluated (base, compressed, or adaptive).  
+They are automatically loaded during runtime to perform inference on CIFAR-100 test data.
 
 
 ## Citation
